@@ -1,0 +1,30 @@
+---
+- name: Install and configure NGINX on EC2 instance
+  hosts: webservers
+  become: yes
+  remote_user: ubuntu  # Adjust as needed for your AMI
+
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all installed packages to the latest version
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+
+    - name: Ensure NGINX is enabled and will start on boot
+      systemd:
+        name: nginx
+        enabled: yes
+
+    - name: Start NGINX service
+      systemd:
+        name: nginx
+        state: started
